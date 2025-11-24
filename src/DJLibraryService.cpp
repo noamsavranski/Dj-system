@@ -77,16 +77,17 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
     // Your implementation here
     std::cout << "[INFO] Loading playlist:" << playlist_name std::endl;
     Playlist currPlaylist(playlist_name);
+    size_t tracksAdded = 0;
     for (size_t i = 0; i < track_indices.size(); i++) {
-        int configIndex = track_indices[i];
-        size_t index = static_cast<size_t>(configIndex - 1);
+        int trackIndex = track_indices[i];
+        size_t index = track_indices[i] - 1;
 
         if (index >= library_vector.size()) {
-            std::cout << "[WARNING] Invalid track index: " << configIndex << std::endl;
+            std::cout << "[WARNING] Invalid track index: " << trackIndex << std::endl;
             continue;
         }
-        AudioTrack* original = library_vector[index];
-        PointerWrapper<AudioTrack> clonedWrapper = original->clone();
+        AudioTrack* originalTrack = library_vector[index];
+        PointerWrapper<AudioTrack> clonedWrapper = originalTrack->clone();
         AudioTrack* clonedTrack = clonedWrapper.get();
 
         if (!clonedTrack) {
@@ -96,8 +97,8 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
         clonedTrack->load();
         clonedTrack->analyze_beatgrid();
         currPlaylist.add_track(clonedTrack);
-        std::cout << "Added '" << clonedTrack->get_title() 
-                  << "' to playlist '" << playlist_name << "'" << std::endl;
+        std::cout << "Added" << clonedTrack->get_title() 
+                  << "to playlist" << playlist_name << std::endl;
         tracksAdded++;
     }
     std::cout << "[INFO] Playlist loaded: " << playlist_name 
