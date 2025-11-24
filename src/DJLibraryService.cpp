@@ -75,6 +75,9 @@ AudioTrack* DJLibraryService::findTrack(const std::string& track_title) {
 void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name, 
                                                const std::vector<int>& track_indices) {
     // Your implementation here
+    std::cout << "[INFO] Loading playlist: << playlist name \n;
+    Playlist 
+    
     // For now, add a placeholder to fix the linker error
     (void)playlist_name;  // Suppress unused parameter warning
     (void)track_indices;  // Suppress unused parameter warning
