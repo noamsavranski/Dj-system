@@ -75,8 +75,33 @@ AudioTrack* DJLibraryService::findTrack(const std::string& track_title) {
 void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name, 
                                                const std::vector<int>& track_indices) {
     // Your implementation here
-    std::cout << "[INFO] Loading playlist: << playlist name \n;
-    Playlist 
+    std::cout << "[INFO] Loading playlist:" << playlist_name std::endl;
+    Playlist currPlaylist(playlist_name);
+    for (size_t i = 0; i < track_indices.size(); i++) {
+        int configIndex = track_indices[i];
+        size_t index = static_cast<size_t>(configIndex - 1);
+
+        if (index >= library_vector.size()) {
+            std::cout << "[WARNING] Invalid track index: " << configIndex << std::endl;
+            continue;
+        }
+        AudioTrack* original = library_vector[index];
+        PointerWrapper<AudioTrack> clonedWrapper = original->clone();
+        AudioTrack* clonedTrack = clonedWrapper.get();
+
+        if (!clonedTrack) {
+            std::cout << "[Error] Failed to clone track: " << original->get_title() << std::endl;
+            continue;
+        }
+        clonedTrack->load();
+        clonedTrack->analyze_beatgrid();
+        currPlaylist.add_track(clonedTrack);
+        std::cout << "Added '" << clonedTrack->get_title() 
+                  << "' to playlist '" << playlist_name << "'" << std::endl;
+        tracksAdded++;
+    }
+    std::cout << "[INFO] Playlist loaded: " << playlist_name 
+              << " (" << tracksAdded << " tracks)" << std::endl;
     
     // For now, add a placeholder to fix the linker error
     (void)playlist_name;  // Suppress unused parameter warning
