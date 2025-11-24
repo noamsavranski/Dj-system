@@ -11,10 +11,10 @@ DJLibraryService::DJLibraryService(const Playlist& playlist)
     : playlist(playlist) {}
 
 DJLibraryService::~DJLibraryService() {
-    for (AudioTrack* track : library_vector) {
+    for (AudioTrack* track : library) {
         delete track;
     }
-    library_vector.clear();
+    library.clear();
 }
 /**
  * @brief Load a playlist from track indices referencing the library
@@ -35,9 +35,9 @@ void DJLibraryService::buildLibrary(const std::vector<SessionConfig::TrackInfo>&
             track = new WAVTrack(trackInfo.title, trackInfo.artists, trackInfo.duration, trackInfo.bpm, trackInfo.extra_param1, trackInfo.extra_param2);
             std::cout << "WAVTrack created: " << trackInfo.extra_param1 << trackInfo.extra_param2 << "bit" << std::endl;
         } 
-    library_vector.push_back(track);
+    library.push_back(track);
     }
-    std::cout << "[INFO] Track library built: " << library_vector.size() << " tracks loaded" << std::endl;
+    std::cout << "[INFO] Track library built: " << library.size() << " tracks loaded" << std::endl;
 }
 
 /**
@@ -89,11 +89,11 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
         int trackIndex = track_indices[i];
         size_t index = track_indices[i] - 1;
 
-        if (index >= library_vector.size()) {
+        if (index >= library.size()) {
             std::cout << "[WARNING] Invalid track index: " << trackIndex << std::endl;
             continue;
         }
-        AudioTrack* originalTrack = library_vector[index];
+        AudioTrack* originalTrack = library[index];
         PointerWrapper<AudioTrack> clonedWrapper = originalTrack->clone();
         AudioTrack* clonedTrack = clonedWrapper.get();
 
