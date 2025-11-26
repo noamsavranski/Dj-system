@@ -37,7 +37,7 @@ void DJLibraryService::buildLibrary(const std::vector<SessionConfig::TrackInfo>&
         } 
     library.push_back(track);
     }
-    std::cout << "[INFO] Track library built: " << library_vector.size() << " tracks loaded" << std::endl;
+    std::cout << "[INFO] Track library built: " << library.size() << " tracks loaded" << std::endl;
 }
 
 /**
